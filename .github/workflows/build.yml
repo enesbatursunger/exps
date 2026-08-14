@@ -19,6 +19,8 @@ jobs:
           gcc -static -O2 -o ../bin/pie_exploit cve-2017-1000253.c -lpthread || true
           curl -fsSL -o cve-2021-22555.c https://raw.githubusercontent.com/google/security-research/master/pocs/linux/cve-2021-22555/exploit.c
           gcc -static -O2 -o ../bin/cve-2021-22555 cve-2021-22555.c -lpthread || true
+          curl -fsSL -o charon.c https://raw.githubusercontent.com/KaraZajac/CHARON/main/charon.c
+          gcc -static -O2 -pthread -o ../bin/charon charon.c || true
           cd ..
           ls -la bin/
           file bin/*
@@ -32,4 +34,5 @@ jobs:
             bin/skb_segment_exploit
             bin/pie_exploit
             bin/cve-2021-22555
+            bin/charon
           retention-days: 7
