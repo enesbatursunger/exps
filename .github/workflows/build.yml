@@ -1,0 +1,24 @@
+name: build-exploits
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'src/**'
+      - 'build.sh'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compile static binaries
+        run: |
+          chmod +x build.sh
+          ./build.sh
+          file bin/*
+      - name: Commit binaries
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add bin/dirtydecrypt bin/fragnesia bin/skb_segment_exploit 2>/dev/null || true
+          git diff --staged --quiet || git commit -m "ci: build static exploits"
+          git push
